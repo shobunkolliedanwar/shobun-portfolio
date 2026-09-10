@@ -3,7 +3,9 @@ import { FormField, fieldClass } from "@/components/admin/FormField";
 import { EmptyState } from "@/components/admin/EmptyState";
 import { InlineDeleteButton } from "@/components/admin/InlineDeleteButton";
 import { CmsForm } from "@/components/admin/CmsForm";
-import { createMetric, deleteMetric } from "@/lib/actions/metrics";
+import {
+  createMetric,
+} from "@/lib/actions/metrics";
 
 export default async function AdminMetricsPage() {
   const supabase = await createClient();
@@ -39,7 +41,10 @@ export default async function AdminMetricsPage() {
               <p className="font-mono text-2xl text-foreground">{item.value}</p>
               <p className="mt-1 text-sm text-muted">{item.label}</p>
               <div className="mt-3">
-                <InlineDeleteButton onConfirm={() => deleteMetric(item.id)} />
+                <InlineDeleteButton
+                  id={item.id}
+                  type="metric"
+                />
               </div>
             </div>
           ))

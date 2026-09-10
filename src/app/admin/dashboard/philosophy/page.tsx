@@ -3,7 +3,9 @@ import { FormField, fieldClass } from "@/components/admin/FormField";
 import { EmptyState } from "@/components/admin/EmptyState";
 import { InlineDeleteButton } from "@/components/admin/InlineDeleteButton";
 import { CmsForm } from "@/components/admin/CmsForm";
-import { createPhilosophy, deletePhilosophy } from "@/lib/actions/philosophy";
+import {
+  createPhilosophy,
+} from "@/lib/actions/philosophy";
 
 export default async function AdminPhilosophyPage() {
   const supabase = await createClient();
@@ -40,7 +42,10 @@ export default async function AdminPhilosophyPage() {
                 <p className="font-medium text-foreground">{item.headline}</p>
                 <p className="mt-1 text-sm text-muted">{item.statement}</p>
               </div>
-              <InlineDeleteButton onConfirm={() => deletePhilosophy(item.id)} />
+              <InlineDeleteButton
+                id={item.id}
+                type="philosophy"
+              />
             </div>
           ))
         ) : (

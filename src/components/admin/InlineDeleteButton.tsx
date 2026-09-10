@@ -3,16 +3,21 @@
 import { useTransition } from "react";
 import { Trash2 } from "lucide-react";
 import { toast } from "sonner";
+
 import {
   deleteSkill,
   deleteSkillCategory,
 } from "@/lib/actions/skills";
 import { deleteSocialLink } from "@/lib/actions/social-links";
+import { deleteMetric } from "@/lib/actions/metrics";
+import { deletePhilosophy } from "@/lib/actions/philosophy";
 
 type DeleteType =
   | "skill"
   | "skill-category"
-  | "social-link";
+  | "social-link"
+  | "metric"
+  | "philosophy";
 
 export function InlineDeleteButton({
   id,
@@ -23,7 +28,7 @@ export function InlineDeleteButton({
 }) {
   const [isPending, startTransition] = useTransition();
 
-   function handleClick() {
+  function handleClick() {
     startTransition(async () => {
       try {
         if (type === "skill-category") {
@@ -32,6 +37,10 @@ export function InlineDeleteButton({
           await deleteSkill(id);
         } else if (type === "social-link") {
           await deleteSocialLink(id);
+        } else if (type === "metric") {
+          await deleteMetric(id);
+        } else if (type === "philosophy") {
+          await deletePhilosophy(id);
         }
 
         toast.success("Removed.");
