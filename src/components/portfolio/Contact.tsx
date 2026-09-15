@@ -8,11 +8,11 @@ export function Contact() {
         <div>
           <p className="font-mono text-sm text-accent">Contact</p>
           <h2 className="mt-4 text-balance text-3xl font-medium tracking-tight text-foreground md:text-4xl">
-            Have a problem worth solving? Let&apos;s build something meaningful.
+            Let&apos;s build reliable systems together.
           </h2>
           <p className="mt-4 max-w-sm text-muted">
-            Open to backend engineering roles, freelance work, and interesting
-            technical problems.
+            Open to remote backend engineering opportunities, freelance projects, and
+            meaningful technical challenges.
           </p>
         </div>
         <ContactForm />

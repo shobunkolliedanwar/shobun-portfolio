@@ -38,7 +38,7 @@ export default async function HomePage() {
   const fallbackProfile = {
     id: "fallback",
     full_name: "Shobun Kollied Anwar",
-    profession: "Backend Developer & Software Engineer",
+    profession: "Backend Software Engineer",
     hero_headline: "Engineering reliable systems behind great digital experiences.",
     hero_description:
       "Backend-focused software engineer building APIs, web platforms, and systems designed to be understood, trusted, and safely changed.",
@@ -62,7 +62,7 @@ export default async function HomePage() {
     <>
       <Navigation resumeUrl={activeProfile.resume_url} ownerName={activeProfile.full_name} />
       <main>
-        <Hero profile={activeProfile} socialLinks={socialLinks} />
+        <Hero profile={activeProfile} socialLinks={socialLinks} hasProjects={projects.length > 0} />
         <About profile={activeProfile} />
         <ExperienceTimeline experiences={experiences} />
         <FeaturedProjects projects={projects} />

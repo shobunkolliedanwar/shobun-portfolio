@@ -1,7 +1,7 @@
 "use client";
 
 import { motion, type Variants } from "framer-motion";
-import { ArrowRight, Link2, Mail, MapPin } from "lucide-react";
+import { ArrowRight, Download, Link2, Mail, MapPin } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { GlowBackground } from "@/components/animations/GlowBackground";
 import { ProfilePortrait } from "./ProfilePortrait";
@@ -18,7 +18,15 @@ const reveal: Variants = {
   }),
 };
 
-export function Hero({ profile, socialLinks }: { profile: Profile; socialLinks: SocialLink[] }) {
+export function Hero({
+  profile,
+  socialLinks,
+  hasProjects,
+}: {
+  profile: Profile;
+  socialLinks: SocialLink[];
+  hasProjects: boolean;
+}) {
   return (
     <section id="home" className="relative overflow-hidden pb-20 pt-40 md:pb-32 md:pt-48">
       <GlowBackground />
@@ -77,12 +85,31 @@ export function Hero({ profile, socialLinks }: { profile: Profile; socialLinks: 
             animate="show"
             className="mt-10 flex flex-wrap items-center gap-4"
           >
-            <Button href="#projects" variant="primary">
-              View my work <ArrowRight size={16} />
-            </Button>
-            <Button href="#contact" variant="secondary">
-              Contact me
-            </Button>
+            {hasProjects ? (
+              <Button href="#projects" variant="primary">
+                View my work <ArrowRight size={16} />
+              </Button>
+            ) : profile.resume_url ? (
+              <Button href={profile.resume_url} variant="primary">
+                View résumé <Download size={16} />
+              </Button>
+            ) : (
+              <Button href="#contact" variant="primary">
+                Contact me <ArrowRight size={16} />
+              </Button>
+            )}
+
+            {profile.resume_url && hasProjects && (
+              <Button href={profile.resume_url} variant="secondary">
+                View résumé <Download size={16} />
+              </Button>
+            )}
+
+            {(hasProjects || profile.resume_url) && (
+              <Button href="#contact" variant="secondary">
+                Contact me
+              </Button>
+            )}
           </motion.div>
 
           <motion.div

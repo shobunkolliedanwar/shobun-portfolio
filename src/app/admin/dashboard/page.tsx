@@ -1,66 +1,33 @@
-import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
-import { StatCard } from "@/components/admin/StatCard";
-import { EmptyState } from "@/components/admin/EmptyState";
+import { FormField, fieldClass } from "@/components/admin/FormField";
+import { MediaPickerField } from "@/components/admin/MediaPickerField";
+import { CmsForm } from "@/components/admin/CmsForm";
+import { updateSiteSettings } from "@/lib/actions/settings";
 
-export default async function AdminDashboardPage() {
+export default async function AdminSettingsPage() {
   const supabase = await createClient();
+  const { data: settings } = await supabase.from("site_settings").select("*").limit(1).maybeSingle();
 
-  const [projects, experiences, skills, messages, unread, recentMessages] = await Promise.all([
-    supabase.from("projects").select("id", { count: "exact", head: true }),
-    supabase.from("experiences").select("id", { count: "exact", head: true }),
-    supabase.from("skills").select("id", { count: "exact", head: true }),
-    supabase.from("contact_messages").select("id", { count: "exact", head: true }),
-    supabase.from("contact_messages").select("id", { count: "exact", head: true }).eq("is_read", false),
-    supabase
-      .from("contact_messages")
-      .select("id, name, email, message, created_at")
-      .order("created_at", { ascending: false })
-      .limit(5),
-  ]);
+  const boundAction = updateSiteSettings.bind(null, settings?.id ?? null);
 
   return (
-    <div>
-      <h1 className="text-2xl font-medium text-foreground">Dashboard</h1>
-      <p className="mt-1 text-sm text-muted">An overview of your portfolio content.</p>
+    <div className="max-w-xl">
+      <h1 className="text-2xl font-medium text-foreground">Site settings</h1>
+      <p className="mt-1 text-sm text-muted">Global SEO defaults used when a page doesn&apos;t set its own.</p>
 
-      <div className="mt-8 grid grid-cols-2 gap-4 md:grid-cols-4">
-        <StatCard label="Projects" value={projects.count ?? 0} />
-        <StatCard label="Experiences" value={experiences.count ?? 0} />
-        <StatCard label="Skills" value={skills.count ?? 0} />
-        <StatCard label="Unread messages" value={unread.count ?? 0} />
-      </div>
-
-      <div className="mt-10">
-        <div className="mb-4 flex items-center justify-between">
-          <h2 className="text-lg font-medium text-foreground">Recent messages</h2>
-          <Link href="/admin/dashboard/messages" className="text-sm text-accent hover:underline">
-            View all ({messages.count ?? 0})
-          </Link>
-        </div>
-
-        {recentMessages.data && recentMessages.data.length > 0 ? (
-          <div className="divide-y divide-border rounded-2xl border border-border bg-bg-elevated">
-            {recentMessages.data.map((m) => (
-              <div key={m.id} className="p-4">
-                <div className="flex items-center justify-between">
-                  <p className="font-medium text-foreground">{m.name}</p>
-                  <p className="text-xs text-muted-2">
-                    {new Date(m.created_at).toLocaleDateString()}
-                  </p>
-                </div>
-                <p className="text-sm text-muted">{m.email}</p>
-                <p className="mt-2 line-clamp-2 text-sm text-muted">{m.message}</p>
-              </div>
-            ))}
-          </div>
-        ) : (
-          <EmptyState
-            title="No messages yet."
-            description="Contact form submissions will show up here."
-          />
-        )}
-      </div>
+      <CmsForm action={boundAction} successMessage="Settings saved." className="mt-8 space-y-5">
+        <FormField label="Site title" htmlFor="site_title">
+          <input id="site_title" name="site_title" defaultValue={settings?.site_title ?? ""} className={fieldClass} />
+        </FormField>
+        <FormField label="Site description" htmlFor="site_description">
+          <textarea id="site_description" name="site_description" rows={2} defaultValue={settings?.site_description ?? ""} className={fieldClass} />
+        </FormField>
+        <MediaPickerField name="favicon_url" label="Favicon" defaultValue={settings?.favicon_url} />
+        <MediaPickerField name="default_og_image_url" label="Default OG image" defaultValue={settings?.default_og_image_url} />
+        <button type="submit" className="rounded-full bg-foreground px-6 py-3 text-sm font-medium text-bg">
+          Save settings
+        </button>
+      </CmsForm>
     </div>
   );
 }
