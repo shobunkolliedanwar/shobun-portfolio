@@ -16,6 +16,11 @@ export function ExperienceRow({ experience }: { experience: Experience }) {
         {experience.is_current ? " — Present" : experience.end_date ? ` — ${new Date(experience.end_date).getFullYear()}` : ""}
       </td>
       <td className="px-4 py-3">
+        <span className={experience.published ? "rounded-full bg-success/10 px-2 py-1 text-xs text-success" : "rounded-full bg-bg-elevated-2 px-2 py-1 text-xs text-muted"}>
+          {experience.published ? "Published" : "Draft"}
+        </span>
+      </td>
+      <td className="px-4 py-3">
         <div className="flex items-center gap-4">
           <Link
             href={`/admin/dashboard/experiences/${experience.id}`}
