@@ -5,7 +5,7 @@ type Variant = "primary" | "secondary" | "ghost";
 type Size = "md" | "sm";
 
 const variants: Record<Variant, string> = {
-  primary: "bg-foreground text-bg hover:bg-foreground/90 border border-transparent",
+  primary: "bg-accent text-bg hover:bg-accent/90 shadow-lg border border-transparent",
   secondary:
     "bg-transparent text-foreground border border-border-strong hover:border-accent/60 hover:text-accent",
   ghost: "bg-transparent text-muted hover:text-foreground",
@@ -37,7 +37,7 @@ type NativeButtonProps = CommonProps &
 export function Button(props: LinkButtonProps | NativeButtonProps) {
   const { variant = "primary", size = "md", className, children } = props;
   const classes = cn(
-    "inline-flex items-center justify-center gap-2 rounded-full font-medium transition-colors duration-200",
+    "inline-flex items-center justify-center gap-2 rounded-xl font-medium transition-colors duration-200",
     variants[variant],
     sizes[size],
     className

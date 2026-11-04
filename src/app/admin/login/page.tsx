@@ -16,34 +16,31 @@ export default function AdminLoginPage() {
     setLoading(true);
     setError(null);
 
-    const supabase = createClient();
-    const { error } = await supabase.auth.signInWithPassword({ email, password });
-
-    setLoading(false);
-
-    if (error) {
-      setError("Invalid email or password.");
-      return;
-    }
-
-    router.push("/admin/dashboard");
-    router.refresh();
+    try {
+      const supabase = createClient();
+      const { error } = await supabase.auth.signInWithPassword({ email, password });
+      if (error) { setError("Invalid email or password."); return; }
+      router.push("/admin/dashboard");
+      router.refresh();
+    } catch { setError("Unable to sign in. Please check your connection and try again."); }
+    finally { setLoading(false); }
   }
 
   return (
-    <main className="flex min-h-screen items-center justify-center bg-bg px-6">
+    <main className="admin-login flex min-h-screen items-center justify-center bg-bg px-6">
       <form
         onSubmit={handleSubmit}
-        className="w-full max-w-sm rounded-2xl border border-border bg-bg-elevated p-8"
+        className="w-full max-w-md rounded-2xl border border-border bg-bg-elevated p-9"
       >
-        <p className="font-mono text-sm text-accent">Admin</p>
-        <h1 className="mt-2 text-2xl font-medium text-foreground">Sign in</h1>
-        <p className="mt-1 text-sm text-muted">Restricted to the site owner.</p>
+        <p className="font-mono text-sm text-accent">STUDIO / OWNER ACCESS</p>
+        <h1 className="mt-2 text-2xl font-medium text-foreground">Welcome back.</h1>
+        <p className="mt-1 text-sm text-muted">Sign in to shape your portfolio and manage your content.</p>
 
         <div className="mt-8 space-y-4">
           <label className="block">
             <span className="mb-2 block text-sm text-muted">Email</span>
             <input
+              autoComplete="username"
               type="email"
               required
               value={email}
@@ -54,6 +51,7 @@ export default function AdminLoginPage() {
           <label className="block">
             <span className="mb-2 block text-sm text-muted">Password</span>
             <input
+              autoComplete="current-password"
               type="password"
               required
               value={password}
@@ -63,7 +61,7 @@ export default function AdminLoginPage() {
           </label>
         </div>
 
-        {error && <p className="mt-4 text-sm text-red-400">{error}</p>}
+        {error && <p role="alert" className="mt-4 text-sm text-red-400">{error}</p>}
 
         <button
           type="submit"
@@ -72,6 +70,7 @@ export default function AdminLoginPage() {
         >
           {loading ? "Signing in…" : "Sign in"}
         </button>
+      <a href="/" className="mt-6 block text-center text-xs text-muted hover:text-accent">← Back to portfolio</a>
       </form>
     </main>
   );

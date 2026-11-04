@@ -1,33 +1,52 @@
 import { createClient } from "@/lib/supabase/server";
 import { FormField, fieldClass } from "@/components/admin/FormField";
-import { MediaPickerField } from "@/components/admin/MediaPickerField";
+import { EmptyState } from "@/components/admin/EmptyState";
+import { InlineDeleteButton } from "@/components/admin/InlineDeleteButton";
 import { CmsForm } from "@/components/admin/CmsForm";
-import { updateSiteSettings } from "@/lib/actions/settings";
+import { createSocialLink } from "@/lib/actions/social-links";
 
-export default async function AdminSettingsPage() {
+export default async function AdminSocialLinksPage() {
   const supabase = await createClient();
-  const { data: settings } = await supabase.from("site_settings").select("*").limit(1).maybeSingle();
-
-  const boundAction = updateSiteSettings.bind(null, settings?.id ?? null);
+  const { data: items } = await supabase.from("social_links").select("*").order("sort_order", { ascending: true });
 
   return (
-    <div className="max-w-xl">
-      <h1 className="text-2xl font-medium text-foreground">Site settings</h1>
-      <p className="mt-1 text-sm text-muted">Global SEO defaults used when a page doesn&apos;t set its own.</p>
+    <div className="max-w-2xl">
+      <h1 className="text-2xl font-medium text-foreground">Social links</h1>
+      <p className="mt-1 text-sm text-muted">Shown in the footer.</p>
 
-      <CmsForm action={boundAction} successMessage="Settings saved." className="mt-8 space-y-5">
-        <FormField label="Site title" htmlFor="site_title">
-          <input id="site_title" name="site_title" defaultValue={settings?.site_title ?? ""} className={fieldClass} />
+      <CmsForm action={createSocialLink} successMessage="Link added." className="mt-8 grid grid-cols-1 gap-4 rounded-2xl border border-border bg-bg-elevated p-6 sm:grid-cols-3">
+        <FormField label="Label" htmlFor="label">
+          <input id="label" name="label" required className={fieldClass} placeholder="GitHub" />
         </FormField>
-        <FormField label="Site description" htmlFor="site_description">
-          <textarea id="site_description" name="site_description" rows={2} defaultValue={settings?.site_description ?? ""} className={fieldClass} />
+        <FormField label="URL" htmlFor="url">
+          <input id="url" name="url" required className={fieldClass} placeholder="https://github.com/..." />
         </FormField>
-        <MediaPickerField name="favicon_url" label="Favicon" defaultValue={settings?.favicon_url} />
-        <MediaPickerField name="default_og_image_url" label="Default OG image" defaultValue={settings?.default_og_image_url} />
-        <button type="submit" className="rounded-full bg-foreground px-6 py-3 text-sm font-medium text-bg">
-          Save settings
+        <FormField label="Sort order" htmlFor="sort_order">
+          <input id="sort_order" name="sort_order" type="number" defaultValue={0} className={fieldClass} />
+        </FormField>
+        <button type="submit" className="col-span-full rounded-full bg-foreground px-6 py-2.5 text-sm font-medium text-bg sm:w-fit">
+          Add link
         </button>
       </CmsForm>
+
+      <div className="mt-8 space-y-3">
+        {items && items.length > 0 ? (
+          items.map((item) => (
+            <div key={item.id} className="flex items-center justify-between rounded-2xl border border-border p-4">
+              <div>
+                <p className="font-medium text-foreground">{item.label}</p>
+                <p className="text-sm text-muted">{item.url}</p>
+              </div>
+              <InlineDeleteButton
+                id={item.id}
+                type="social-link"
+              />
+            </div>
+          ))
+        ) : (
+          <EmptyState title="No social links yet." description="Add GitHub, LinkedIn, or anything else you'd like in the footer." />
+        )}
+      </div>
     </div>
   );
 }

@@ -11,7 +11,7 @@ export function Section({
   children: React.ReactNode;
 }) {
   return (
-    <section id={id} className={cn("py-24 md:py-32", className)}>
+    <section id={id} className={cn("py-20 md:py-24", className)}>
       <Container>{children}</Container>
     </section>
   );
@@ -29,9 +29,9 @@ export function SectionHeading({
   return (
     <div className="mb-14 max-w-2xl">
       {label && (
-        <p className="mb-3 font-mono text-sm text-accent">{label}</p>
+        <p className="mb-3 font-mono text-xs uppercase tracking-[.18em] text-accent">{label}</p>
       )}
-      <h2 className="text-balance text-3xl font-medium tracking-tight text-foreground md:text-4xl">
+      <h2 className="text-balance text-3xl font-semibold tracking-tight text-foreground md:text-4xl">
         {title}
       </h2>
       {description && (

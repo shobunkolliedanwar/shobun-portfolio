@@ -9,22 +9,20 @@
    labels/data (justified by subject: an engineer's own tool).
    ========================================================= */
 :root {
-  --bg: #0a0b0d;
-  --bg-elevated: #121317;
-  --bg-elevated-2: #17181d;
-  --border: rgba(237, 237, 240, 0.08);
-  --border-strong: rgba(237, 237, 240, 0.14);
-  --foreground: #edeef0;
-  --muted: #9a9ca6;
-  --muted-2: #6c6e78;
-  --accent: #c98f4a;
-  --accent-soft: rgba(201, 143, 74, 0.14);
-  --accent-glow: rgba(201, 143, 74, 0.35);
-  --success: #6ba97d;
-
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-
+  --bg: #0b1523;
+  --bg-elevated: #122136;
+  --bg-elevated-2: #192b43;
+  --border: #ffffff14;
+  --border-strong: #ffffff28;
+  --foreground: #f3f6fb;
+  --muted: #b0bed0;
+  --muted-2: #93a7bf;
+  --accent: #78e6ca;
+  --accent-soft: #78e6ca16;
+  --accent-glow: #78e6ca40;
+  --success: #78e6ca;
+  --font-sans: "Inter", "Segoe UI", Arial, sans-serif;
+  --font-mono: "SFMono-Regular", Consolas, monospace;
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
 }
@@ -100,3 +98,42 @@ body {
   outline-offset: 3px;
   border-radius: 2px;
 }
+
+/* Portfolio / studio design system */
+body { margin: 0; }
+section[id] { scroll-margin-top: 100px; }
+button, a, input, textarea, select { -webkit-tap-highlight-color: transparent; }
+button { cursor: pointer; }
+button:disabled { cursor: wait; }
+textarea { resize: vertical; }
+.hero-grid { background-image: linear-gradient(#ffffff04 1px, transparent 1px), linear-gradient(90deg,#ffffff04 1px,transparent 1px); background-size: 64px 64px; }
+.hero-display { font-size: clamp(3rem, 6.8vw, 6rem); line-height: 1.02; letter-spacing: -.065em; font-weight: 600; }
+.hero-orbit { background: radial-gradient(ellipse at 65% 40%, #4e9cbd20, transparent 65%); }
+.portfolio-card { border: 1px solid var(--border); border-radius: 24px; background: var(--bg-elevated); transition: border-color .25s, transform .25s; }
+.portfolio-card:hover { border-color: var(--border-strong); transform: translateY(-4px); }
+#about { background: #101e30; border-block: 1px solid var(--border); }
+#skills { background: #101e30; }
+#contact > div > div { padding: clamp(24px,5vw,64px); border-radius: 28px; background: linear-gradient(130deg,#1b3447,#14243a); border: 1px solid var(--border-strong); }
+#experience ol { margin-left: 8px; }
+#experience ol > li { padding: 0 0 40px 12px; }
+#skills ul { border-top: 0; }
+#skills li { border: 1px solid var(--border); border-radius: 12px; padding: 14px; background: var(--bg); }
+.admin-shell, .admin-login { --bg: #f4f7fb; --bg-elevated: #fff; --bg-elevated-2: #eaf0f7; --foreground: #172b45; --muted: #526780; --muted-2: #62748b; --border: #dfe6ef; --border-strong: #c9d4e3; --accent: #087b69; --accent-soft: #e1f5ef; --accent-glow: #087b6920; --success: #087b69; color-scheme: light; color: var(--foreground); background: var(--bg); }
+.admin-sidebar { --bg-elevated: #102036; --foreground: #f3f6fb; --muted: #b0bed0; --muted-2: #9aadc5; --border: #ffffff15; --accent: #78e6ca; background: #102036; }
+.admin-sidebar nav a { min-height: 42px; border-radius: 10px; }
+.admin-sidebar nav a[aria-current="page"] { color: #86efd5; background: #78e6ca16; box-shadow: inset 3px 0 #78e6ca; }
+.admin-shell main > div { width: 100%; margin-inline: auto; }
+.admin-shell h1 { font-size: clamp(1.65rem,3vw,2.1rem); font-weight: 650; letter-spacing: -.04em; }
+.admin-shell main form { padding: 24px; background: #fff; border: 1px solid var(--border); border-radius: 20px; }
+.admin-shell input:not([type=checkbox]):not([type=file]), .admin-shell textarea, .admin-shell select { background: #f8fafc; min-height: 44px; transition: box-shadow .2s; }
+.admin-shell input:focus, .admin-shell textarea:focus { box-shadow: 0 0 0 3px var(--accent-glow); }
+.admin-shell button[type=submit], .admin-login button[type=submit] { background: #107b68; color: #fff; border-radius: 12px; min-height: 44px; }
+.admin-shell table { background: white; }
+.admin-shell thead { background: #edf2f8; }
+.admin-shell th { font-size: 11px; font-weight: 650; text-transform: uppercase; letter-spacing: .08em; padding: 17px 20px; }
+.admin-shell td { padding: 18px 20px; }
+.admin-shell tbody tr:hover { background: #f8fafc; }
+.admin-topbar { background: #ffffffde; backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
+.admin-login { background-image: radial-gradient(ellipse at 0% 20%,#b9e2d7 0,transparent 50%); }
+.admin-login form { box-shadow: 0 20px 80px #10203612; }
+@media(max-width:767px) { .admin-shell main form { padding: 18px; } #contact > div > div { gap: 32px; } }

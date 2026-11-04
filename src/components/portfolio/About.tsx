@@ -10,11 +10,11 @@ const PILLARS = [
 export function About({ profile }: { profile: Profile }) {
   return (
     <Section id="about">
-      <div className="grid grid-cols-1 gap-16 md:grid-cols-[0.9fr_1.1fr]">
+      <div className="grid grid-cols-1 gap-16 md:grid-cols-[0.7fr_1.3fr]">
         <div>
           <p className="font-mono text-sm text-accent">About</p>
           {profile.years_experience && (
-            <p className="mt-4 text-6xl font-medium tracking-tight text-foreground md:text-7xl">
+            <p className="mt-4 text-8xl font-medium tracking-tight text-accent md:text-9xl">
               {profile.years_experience}+
             </p>
           )}

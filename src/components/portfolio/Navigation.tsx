@@ -61,11 +61,11 @@ export function Navigation({
     >
       <div
         className={cn(
-          "flex items-center justify-between rounded-full border border-border px-5 py-3 backdrop-blur-xl transition-colors duration-300",
+          "flex items-center justify-between rounded-2xl border border-border-strong px-5 py-3 backdrop-blur-xl transition-colors duration-300",
           scrolled ? "bg-bg-elevated/80" : "bg-bg-elevated/40"
         )}
       >
-        <Link href="#home" className="font-mono text-sm tracking-tight text-foreground">
+        <Link href="#home" className="font-mono text-sm font-bold tracking-tight text-foreground">
           {(ownerName?.split(" ")[0] ?? "Portfolio").toUpperCase()}
           <span className="text-accent">.</span>
         </Link>
@@ -83,7 +83,7 @@ export function Navigation({
               {active === item.href && (
                 <motion.span
                   layoutId="nav-active"
-                  className="absolute inset-0 rounded-full bg-white/[0.06]"
+                  className="absolute inset-0 rounded-full bg-accent-soft"
                   transition={{ type: "spring", stiffness: 350, damping: 30 }}
                 />
               )}
@@ -132,7 +132,7 @@ export function Navigation({
                 onClick={() => setMobileOpen(false)}
                 className={cn(
                   "rounded-xl px-4 py-3 text-sm",
-                  active === item.href ? "bg-white/[0.06] text-foreground" : "text-muted"
+                  active === item.href ? "bg-accent-soft text-foreground" : "text-muted"
                 )}
               >
                 {item.label}

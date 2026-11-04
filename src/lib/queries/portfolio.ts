@@ -20,6 +20,7 @@ import type {
  */
 
 export async function getProfile(): Promise<Profile | null> {
+  if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) return null;
   const supabase = await createClient();
   const { data } = await supabase
     .from("profiles")
@@ -31,6 +32,7 @@ export async function getProfile(): Promise<Profile | null> {
 }
 
 export async function getSocialLinks(): Promise<SocialLink[]> {
+  if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) return [];
   const supabase = await createClient();
   const { data } = await supabase
     .from("social_links")
@@ -41,6 +43,7 @@ export async function getSocialLinks(): Promise<SocialLink[]> {
 }
 
 export async function getExperiences(): Promise<Experience[]> {
+  if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) return [];
   const supabase = await createClient();
   const { data } = await supabase
     .from("experiences")
@@ -52,6 +55,7 @@ export async function getExperiences(): Promise<Experience[]> {
 }
 
 export async function getFeaturedProjects(): Promise<Project[]> {
+  if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) return [];
   const supabase = await createClient();
   const { data } = await supabase
     .from("projects")
@@ -63,6 +67,7 @@ export async function getFeaturedProjects(): Promise<Project[]> {
 }
 
 export async function getAllProjects(): Promise<Project[]> {
+  if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) return [];
   const supabase = await createClient();
   const { data } = await supabase
     .from("projects")
@@ -75,6 +80,7 @@ export async function getAllProjects(): Promise<Project[]> {
 export async function getProjectBySlug(
   slug: string
 ): Promise<(Project & { images: ProjectImage[] }) | null> {
+  if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) return null;
   const supabase = await createClient();
   const { data: project } = await supabase
     .from("projects")
@@ -97,6 +103,7 @@ export async function getProjectBySlug(
 export async function getSkillCategoriesWithSkills(): Promise<
   (SkillCategory & { skills: Skill[] })[]
 > {
+  if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) return [];
   const supabase = await createClient();
   const { data: categories } = await supabase
     .from("skill_categories")
@@ -118,6 +125,7 @@ export async function getSkillCategoriesWithSkills(): Promise<
 }
 
 export async function getPhilosophies(): Promise<Philosophy[]> {
+  if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) return [];
   const supabase = await createClient();
   const { data } = await supabase
     .from("philosophies")
@@ -128,6 +136,7 @@ export async function getPhilosophies(): Promise<Philosophy[]> {
 }
 
 export async function getMetrics(): Promise<Metric[]> {
+  if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) return [];
   const supabase = await createClient();
   const { data } = await supabase
     .from("metrics")
@@ -138,6 +147,7 @@ export async function getMetrics(): Promise<Metric[]> {
 }
 
 export async function getSiteSettings(): Promise<SiteSettings | null> {
+  if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) return null;
   const supabase = await createClient();
   const { data } = await supabase.from("site_settings").select("*").limit(1).maybeSingle();
   return data;

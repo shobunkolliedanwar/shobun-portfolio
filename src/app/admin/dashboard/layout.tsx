@@ -1,12 +1,6 @@
 import { AdminSidebar } from "@/components/admin/AdminSidebar";
+import { AdminTopbar } from "@/components/admin/AdminTopbar";
 import { Toaster } from "sonner";
-
 export default function AdminDashboardLayout({ children }: { children: React.ReactNode }) {
-  return (
-    <div className="flex min-h-screen flex-col bg-bg md:flex-row">
-      <AdminSidebar />
-      <main className="flex-1 overflow-x-hidden overflow-y-auto p-4 sm:p-6 md:p-8">{children}</main>
-      <Toaster theme="dark" position="bottom-right" />
-    </div>
-  );
+ return <div className="admin-shell flex min-h-screen flex-col md:flex-row"><AdminSidebar/><div className="min-w-0 flex-1"><AdminTopbar/><main className="overflow-x-hidden p-5 sm:p-7 md:p-10">{children}</main></div><Toaster theme="light" position="bottom-right" richColors/></div>;
 }

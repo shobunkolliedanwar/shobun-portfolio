@@ -51,11 +51,12 @@ function NavLinks({ onNavigate }: { onNavigate?: () => void }) {
           <div className="space-y-1">
             {group.items.map((item) => {
               const Icon = item.icon;
-              const active = pathname === item.href;
+              const active = pathname === item.href || (item.href !== "/admin/dashboard" && pathname.startsWith(`${item.href}/`));
               return (
                 <Link
                   key={item.href}
                   href={item.href}
+                  aria-current={active ? "page" : undefined}
                   onClick={onNavigate}
                   className={cn(
                     "flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-colors",
@@ -100,18 +101,19 @@ export function AdminSidebar() {
   return (
     <>
       {/* Desktop: fixed sidebar */}
-      <aside className="hidden h-screen w-64 shrink-0 flex-col border-r border-border bg-bg-elevated p-5 md:sticky md:top-0 md:flex">
+      <aside className="admin-sidebar hidden h-screen w-64 shrink-0 flex-col border-r border-border bg-bg-elevated p-5 md:sticky md:top-0 md:flex">
         <Link href="/admin/dashboard" className="font-mono text-sm text-foreground">
-          Admin<span className="text-accent">.</span>CMS
+          Studio<span className="text-accent">.</span>CMS
         </Link>
+        <p className="mt-2 text-xs text-muted-2">Your portfolio workspace</p>
         <NavLinks />
         <SignOutButton />
       </aside>
 
       {/* Mobile: top bar + drawer */}
-      <div className="sticky top-0 z-40 flex items-center justify-between border-b border-border bg-bg-elevated p-4 md:hidden">
+      <div className="admin-sidebar sticky top-0 z-40 flex items-center justify-between border-b border-border bg-bg-elevated p-4 md:hidden">
         <Link href="/admin/dashboard" className="font-mono text-sm text-foreground">
-          Admin<span className="text-accent">.</span>CMS
+          Studio<span className="text-accent">.</span>CMS
         </Link>
         <button
           onClick={() => setOpen(true)}
@@ -130,10 +132,10 @@ export function AdminSidebar() {
             className="absolute inset-0 bg-black/60"
             onClick={() => setOpen(false)}
           />
-          <aside className="absolute inset-y-0 left-0 flex w-72 max-w-[85vw] flex-col border-r border-border bg-bg-elevated p-5">
+          <aside className="admin-sidebar absolute inset-y-0 left-0 flex w-72 max-w-[85vw] flex-col border-r border-border bg-bg-elevated p-5">
             <div className="flex items-center justify-between">
               <Link href="/admin/dashboard" className="font-mono text-sm text-foreground" onClick={() => setOpen(false)}>
-                Admin<span className="text-accent">.</span>CMS
+                Studio<span className="text-accent">.</span>CMS
               </Link>
               <button onClick={() => setOpen(false)} aria-label="Close menu" className="p-1 text-muted">
                 <X size={18} />

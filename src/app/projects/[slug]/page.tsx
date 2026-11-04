@@ -13,6 +13,7 @@ export async function generateStaticParams() {
   // cannot use the cookie-based server client (getAllProjects() does,
   // via createClient() -> cookies()). Query directly with the cookie-free
   // static client instead — RLS still restricts this to published rows.
+  if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) return [];
   const supabase = createStaticClient();
   const { data: projects } = await supabase.from("projects").select("slug").eq("published", true);
   return (projects ?? []).map((p) => ({ slug: p.slug }));

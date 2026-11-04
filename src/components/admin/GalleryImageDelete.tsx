@@ -23,7 +23,7 @@ export function GalleryImageDelete({ id, projectId }: { id: string; projectId: s
     <button
       disabled={isPending}
       onClick={handleClick}
-      className="inline-flex items-center gap-1 rounded-full bg-bg/80 p-1.5 text-white hover:bg-red-500/90 disabled:opacity-50"
+      className="inline-flex items-center gap-1 rounded-full bg-bg/80 p-1.5 text-foreground hover:text-white hover:bg-red-500/90 disabled:opacity-50"
       aria-label="Remove image"
     >
       <Trash2 size={14} />

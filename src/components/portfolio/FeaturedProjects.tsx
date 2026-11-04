@@ -6,7 +6,7 @@ import { motion } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
 import { SectionHeading, Section } from "@/components/ui/Section";
 import { TechBadge } from "@/components/ui/Badge";
-import { cn } from "@/lib/utils/cn";
+
 import type { Project } from "@/types/database";
 
 export function FeaturedProjects({ projects }: { projects: Project[] }) {
@@ -20,7 +20,7 @@ export function FeaturedProjects({ projects }: { projects: Project[] }) {
         description="Backend architecture, APIs, and the systems behind them."
       />
 
-      <div className="flex flex-col gap-24 md:gap-32">
+      <div className="grid grid-cols-1 gap-7 md:grid-cols-2">
         {projects.map((project, i) => (
           <motion.div
             key={project.id}
@@ -28,12 +28,9 @@ export function FeaturedProjects({ projects }: { projects: Project[] }) {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-10%" }}
             transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-            className={cn(
-              "grid grid-cols-1 items-center gap-10 md:grid-cols-2 md:gap-16",
-              i % 2 === 1 && "md:[&>*:first-child]:order-2"
-            )}
+            className="portfolio-card group overflow-hidden"
           >
-            <div className="relative aspect-[4/3] overflow-hidden rounded-2xl border border-border bg-bg-elevated">
+            <div className="relative aspect-[16/10] overflow-hidden border-b border-border bg-bg-elevated">
               {project.thumbnail_url ? (
                 <Image
                   src={project.thumbnail_url}
@@ -44,12 +41,12 @@ export function FeaturedProjects({ projects }: { projects: Project[] }) {
                 />
               ) : (
                 <div className="flex h-full w-full items-center justify-center font-mono text-xs text-muted-2">
-                  thumbnail.pending
+                  {project.title}
                 </div>
               )}
             </div>
 
-            <div>
+            <div className="p-7">
               <p className="font-mono text-sm text-muted-2">
                 {String(i + 1).padStart(2, "0")}
                 {project.project_year ? ` · ${project.project_year}` : ""}

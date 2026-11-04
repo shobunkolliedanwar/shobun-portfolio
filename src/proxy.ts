@@ -9,8 +9,14 @@ import { NextResponse, type NextRequest } from "next/server";
  * RLS enforces the same is_admin() check at the database layer
  * regardless of what this middleware does.
  */
-export async function updateSession(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   let supabaseResponse = NextResponse.next({ request });
+  if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
+    if (request.nextUrl.pathname.startsWith("/admin") && !["/admin/login", "/admin/unauthorized"].includes(request.nextUrl.pathname)) {
+      return NextResponse.redirect(new URL("/admin/login", request.url));
+    }
+    return supabaseResponse;
+  }
 
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -75,3 +81,5 @@ export async function updateSession(request: NextRequest) {
 
   return supabaseResponse;
 }
+
+export const config = { matcher: ["/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)"] };

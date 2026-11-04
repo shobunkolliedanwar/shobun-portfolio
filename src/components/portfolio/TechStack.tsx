@@ -14,7 +14,7 @@ export function TechStack({
       <SectionHeading label="Tech stack" title="Tools I reach for." />
       <div className="grid grid-cols-1 gap-x-10 gap-y-12 sm:grid-cols-2 lg:grid-cols-3">
         {categories.map((category) => (
-          <div key={category.id}>
+          <div key={category.id} className="portfolio-card p-6">
             <h3 className="text-sm text-muted-2">{category.name}</h3>
             <ul className="mt-4 space-y-3 border-t border-border pt-4">
               {category.skills.map((skill) => (
