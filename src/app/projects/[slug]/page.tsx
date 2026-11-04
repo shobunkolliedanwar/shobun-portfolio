@@ -35,15 +35,18 @@ export async function generateMetadata({
   const ogImage =
     project.og_image_url || project.hero_image_url || project.thumbnail_url || settings?.default_og_image_url || undefined;
 
+  const title = project.seo_title || project.title;
+  const description = project.seo_description || project.short_description || settings?.site_description || undefined;
+
   return {
-    title: project.seo_title || project.title,
-    description: project.seo_description || project.short_description || undefined,
+    title,
+    description,
     alternates: { canonical: `${siteUrl}/projects/${project.slug}` },
-    openGraph: ogImage ? { images: [ogImage] } : undefined,
+    openGraph: { type: "website", title, description, siteName: settings?.site_title || undefined, ...(ogImage ? { images: [ogImage] } : {}) },
     twitter: {
       card: "summary_large_image",
-      title: project.seo_title || project.title,
-      description: project.seo_description || project.short_description || undefined,
+      title,
+      description,
       images: ogImage ? [ogImage] : undefined,
     },
   };

@@ -25,11 +25,13 @@ export function CmsForm({
   action,
   successMessage = "Saved.",
   className,
+  resetOnSuccess = true,
   children,
 }: {
   action: (formData: FormData) => Promise<void>;
   successMessage?: string;
   className?: string;
+  resetOnSuccess?: boolean;
   children: React.ReactNode;
 }) {
   const [isPending, startTransition] = useTransition();
@@ -42,7 +44,7 @@ export function CmsForm({
       try {
         await action(formData);
         toast.success(successMessage);
-        form.reset();
+        if (resetOnSuccess) form.reset();
       } catch (err) {
         toast.error(err instanceof Error ? err.message : "Something went wrong.");
       }

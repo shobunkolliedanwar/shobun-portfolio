@@ -6,16 +6,18 @@ import { updateSiteSettings } from "@/lib/actions/settings";
 
 export default async function AdminSettingsPage() {
   const supabase = await createClient();
-  const { data: settings } = await supabase.from("site_settings").select("*").limit(1).maybeSingle();
+  const { data: settings, error } = await supabase.from("site_settings").select("*").limit(1).maybeSingle();
+
+  if (error) throw new Error("Unable to load site settings. Please try again.");
 
   const boundAction = updateSiteSettings.bind(null, settings?.id ?? null);
 
   return (
     <div className="max-w-xl">
       <h1 className="text-2xl font-medium text-foreground">Site settings</h1>
-      <p className="mt-1 text-sm text-muted">Global SEO defaults used when a page doesn&apos;t set its own.</p>
+      <p className="mt-1 text-sm text-muted">Set the browser tab title, search description, favicon, and default social share image. Page-specific project SEO takes priority.</p>
 
-      <CmsForm action={boundAction} successMessage="Settings saved." className="mt-8 space-y-5">
+      <CmsForm resetOnSuccess={false} action={boundAction} successMessage="Settings saved." className="mt-8 space-y-5">
         <FormField label="Site title" htmlFor="site_title">
           <input id="site_title" name="site_title" defaultValue={settings?.site_title ?? ""} className={fieldClass} />
         </FormField>

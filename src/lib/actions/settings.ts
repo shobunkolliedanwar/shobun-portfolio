@@ -33,10 +33,10 @@ export async function updateSiteSettings(id: string | null, formData: FormData) 
 
   const supabase = await createClient();
   const { error } = id
-    ? await supabase.from("site_settings").update(payload).eq("id", id)
-    : await supabase.from("site_settings").insert(payload);
+    ? await supabase.from("site_settings").update(payload).eq("id", id).select("id").single()
+    : await supabase.from("site_settings").insert(payload).select("id").single();
 
   if (error) throw new Error(error.message);
   revalidatePath("/admin/dashboard/settings");
-  revalidatePath("/");
+  revalidatePath("/", "layout");
 }
