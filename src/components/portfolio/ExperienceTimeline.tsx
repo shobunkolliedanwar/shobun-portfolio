@@ -2,10 +2,20 @@ import { SectionHeading, Section } from "@/components/ui/Section";
 import { TechBadge } from "@/components/ui/Badge";
 import type { Experience } from "@/types/database";
 
+const dateFormatter = new Intl.DateTimeFormat("en-GB", {
+  day: "numeric", month: "long", year: "numeric", timeZone: "UTC",
+});
+
+function formatDate(value: string) {
+  // Database date values are calendar dates: keep them stable across time zones.
+  const date = new Date(value);
+  return Number.isNaN(date.getTime()) ? value : dateFormatter.format(date);
+}
+
 function formatRange(exp: Experience) {
-  const start = new Date(exp.start_date).getFullYear();
-  const end = exp.is_current ? "Present" : exp.end_date ? new Date(exp.end_date).getFullYear() : "";
-  return end ? `${start} — ${end}` : `${start}`;
+  const start = formatDate(exp.start_date);
+  const end = exp.is_current ? "Present" : exp.end_date ? formatDate(exp.end_date) : "";
+  return end ? `${start} — ${end}` : start;
 }
 
 export function ExperienceTimeline({ experiences }: { experiences: Experience[] }) {
