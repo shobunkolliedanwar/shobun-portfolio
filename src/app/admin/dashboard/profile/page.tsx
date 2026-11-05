@@ -17,7 +17,7 @@ export default async function AdminProfilePage() {
         This powers your hero section and site-wide contact details.
       </p>
 
-      <CmsForm action={boundAction} successMessage="Profile saved." className="mt-8 space-y-5">
+      <CmsForm key={`${profile?.id ?? "new"}:${profile?.updated_at ?? ""}:${profile?.resume_url ?? ""}`} resetOnSuccess={false} action={boundAction} successMessage="Profile saved." className="mt-8 space-y-5">
         <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
           <FormField label="Full name" htmlFor="full_name">
             <input id="full_name" name="full_name" defaultValue={profile?.full_name} required className={fieldClass} />
@@ -45,10 +45,19 @@ export default async function AdminProfilePage() {
           defaultValue={profile?.profile_photo_url}
         />
 
+        <div className="rounded-2xl border border-border bg-bg p-5">
+          <h2 className="font-semibold text-foreground">CV / Résumé</h2>
+          <p className="mt-2 text-sm text-muted">Upload a PDF (maximum 5 MB). The file is uploaded when you save your profile. Your published CV will be publicly downloadable.</p>
+          <input type="hidden" name="resume_url" value={profile?.resume_url ?? ""} />
+          <label htmlFor="resume_file" className="mt-4 block text-sm text-muted">Upload or replace CV</label>
+          <input id="resume_file" name="resume_file" type="file" accept=".pdf,application/pdf" className="mt-2 block w-full rounded-xl border border-border-strong bg-bg-elevated p-3 text-sm text-foreground file:mr-4 file:rounded-lg file:border-0 file:bg-accent-soft file:px-4 file:py-2 file:text-accent" />
+          {profile?.resume_url && <div className="mt-4 space-y-3">
+            <a href={profile.resume_url} target="_blank" rel="noopener noreferrer" className="inline-block text-sm text-accent hover:underline">View current CV ↗</a>
+            <label className="flex items-center gap-2 text-sm text-muted"><input type="checkbox" name="resume_remove" />Remove CV from profile</label>
+          </div>}
+        </div>
+
         <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
-          <FormField label="Resume URL" htmlFor="resume_url">
-            <input id="resume_url" name="resume_url" defaultValue={profile?.resume_url ?? ""} className={fieldClass} />
-          </FormField>
           <FormField label="Location" htmlFor="location">
             <input id="location" name="location" defaultValue={profile?.location ?? ""} className={fieldClass} />
           </FormField>

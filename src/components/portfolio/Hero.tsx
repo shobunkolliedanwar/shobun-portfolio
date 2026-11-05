@@ -15,7 +15,7 @@ export function Hero({ profile, socialLinks, hasProjects }: { profile: Profile; 
           <p className="mt-4 max-w-lg text-sm leading-7 text-muted">{profile.hero_description}</p>
           <div className="mt-9 flex flex-wrap gap-3">
             <Button href={hasProjects ? "#projects" : "#contact"}>{hasProjects ? "Explore my work" : "Let’s connect"}<ArrowUpRight size={17}/></Button>
-            {profile.resume_url && <Button href={profile.resume_url} variant="secondary" target="_blank" rel="noopener noreferrer">Résumé <Download size={16}/></Button>}
+            {profile.resume_url && <a href="/api/cv" download className="inline-flex items-center justify-center gap-2 rounded-xl border border-border-strong px-6 py-3 text-sm font-medium text-foreground transition-colors hover:border-accent/60 hover:text-accent">Get My CV <Download size={16}/></a>}
           </div>
           <div className="mt-9 flex flex-wrap gap-5 text-xs text-muted">
             {profile.location && <span className="flex items-center gap-2"><MapPin size={14}/>{profile.location}</span>}

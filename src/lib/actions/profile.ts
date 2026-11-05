@@ -67,11 +67,34 @@ export async function updateProfile(id: string | null, formData: FormData) {
     // for backward compatibility but the CMS no longer edits them.
   };
 
-  const { error } = id
-    ? await supabase.from("profiles").update(payload).eq("id", id)
-    : await supabase.from("profiles").insert(payload);
+  const file = formData.get("resume_file");
+  let uploadedPath: string | null = null;
+  if (file instanceof File && file.size > 0) {
+    if (formData.get("resume_remove") === "on") throw new Error("Choose either replacing or removing your CV.");
+    if (file.size > 5 * 1024 * 1024) throw new Error("CV must be 5 MB or smaller.");
+    if (!file.name.toLowerCase().endsWith(".pdf") || (file.type && file.type !== "application/pdf")) throw new Error("Only PDF files are supported for CV uploads.");
+    const signature = new TextDecoder().decode(await file.slice(0, 5).arrayBuffer());
+    if (signature !== "%PDF-") throw new Error("This file is not a valid PDF.");
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) throw new Error("Please sign in again before uploading a CV.");
+    const { data: isAdmin, error: adminError } = await supabase.rpc("is_admin");
+    if (adminError || isAdmin !== true) throw new Error("Only the site owner can upload a CV.");
+    uploadedPath = `${crypto.randomUUID()}.pdf`;
+    const { error: uploadError } = await supabase.storage.from("cvs").upload(uploadedPath, file, { contentType: "application/pdf", upsert: false, cacheControl: "3600" });
+    if (uploadError) throw new Error(`CV upload failed: ${uploadError.message}. Ensure migration 0004_cv_storage.sql has been applied.`);
+    payload.resume_url = supabase.storage.from("cvs").getPublicUrl(uploadedPath).data.publicUrl;
+  } else if (formData.get("resume_remove") === "on") {
+    payload.resume_url = null;
+  }
 
-  if (error) throw new Error(error.message);
+  const { error } = id
+    ? await supabase.from("profiles").update(payload).eq("id", id).select("id").single()
+    : await supabase.from("profiles").insert(payload).select("id").single();
+
+  if (error) {
+    if (uploadedPath) await supabase.storage.from("cvs").remove([uploadedPath]);
+    throw new Error(error.message);
+  }
 
   revalidatePath("/admin/dashboard/profile");
   revalidatePath("/");
