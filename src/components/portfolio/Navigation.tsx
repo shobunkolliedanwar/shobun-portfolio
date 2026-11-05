@@ -92,19 +92,6 @@ export function Navigation({
           ))}
         </nav>
 
-        <div className="hidden items-center gap-3 md:flex">
-          {resumeUrl && (
-            <a
-              href={resumeUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="rounded-full border border-border-strong px-4 py-2 text-sm text-foreground transition-colors hover:border-accent/60 hover:text-accent"
-            >
-              Resume
-            </a>
-          )}
-        </div>
-
         <button
           className="p-2 text-foreground md:hidden"
           aria-label={mobileOpen ? "Close menu" : "Open menu"}
