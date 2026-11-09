@@ -1,26 +1,14 @@
+import Link from "next/link";
+import { ArrowRight, Plus, User, FolderKanban, Briefcase, Inbox } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
-import { EmptyState } from "@/components/admin/EmptyState";
-import { MessageCard } from "@/components/admin/MessageCard";
-
-export default async function AdminMessagesPage() {
-  const supabase = await createClient();
-  const { data: messages } = await supabase
-    .from("contact_messages")
-    .select("*")
-    .order("created_at", { ascending: false });
-
-  return (
-    <div className="max-w-2xl">
-      <h1 className="text-2xl font-medium text-foreground">Messages</h1>
-      <p className="mt-1 text-sm text-muted">Submissions from your contact form.</p>
-
-      <div className="mt-8 space-y-4">
-        {messages && messages.length > 0 ? (
-          messages.map((m) => <MessageCard key={m.id} message={m} />)
-        ) : (
-          <EmptyState title="No messages yet." description="Contact form submissions will show up here." />
-        )}
-      </div>
-    </div>
-  );
+import { StatCard } from "@/components/admin/StatCard";
+export default async function DashboardPage() {
+ const supabase = await createClient();
+ const tables = ["projects", "experiences", "skills", "messages"] as const;
+ const results = await Promise.all(tables.map(table => supabase.from(table).select("*", {count:"exact",head:true})));
+ const actions = [{title:"Profile & introduction",description:"Keep your story and contact details up to date.",href:"profile",icon:User},{title:"Selected projects",description:"Show the work you’re proud of.",href:"projects",icon:FolderKanban},{title:"Work experience",description:"Build a clear picture of your career.",href:"experiences",icon:Briefcase},{title:"Your inbox",description:"Read messages from portfolio visitors.",href:"messages",icon:Inbox}];
+ return <div className="max-w-6xl"><div className="flex flex-wrap items-center justify-between gap-4"><div><p className="mb-2 text-xs font-medium uppercase tracking-[.16em] text-accent">Portfolio studio</p><h1>Welcome to your workspace.</h1><p className="mt-2 text-sm text-muted">A little care here. A great first impression out there.</p></div><Link href="/admin/dashboard/projects/new" className="flex items-center gap-2 rounded-xl bg-foreground px-5 py-3 text-sm text-bg"><Plus size={16}/>New project</Link></div>
+ <div className="mt-8 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">{tables.map((table,i)=><StatCard key={table} label={table.charAt(0).toUpperCase()+table.slice(1)} value={results[i].count ?? 0}/>)}</div>
+ <div className="mt-8 grid gap-7 lg:grid-cols-[1.5fr_1fr]"><section className="rounded-2xl border border-border bg-bg-elevated p-6"><h2 className="text-lg font-semibold">Make it yours</h2><p className="mt-1 text-sm text-muted">Everything you need to shape your portfolio.</p><div className="mt-5 divide-y divide-border">{actions.map(a=><Link key={a.href} href={`/admin/dashboard/${a.href}`} className="group flex items-center gap-4 py-5"><span className="rounded-xl bg-bg p-3 text-accent"><a.icon size={19}/></span><div className="flex-1"><h3 className="text-sm font-semibold group-hover:text-accent">{a.title}</h3><p className="mt-1 text-xs text-muted">{a.description}</p></div><ArrowRight size={16} className="text-muted-2"/></Link>)}</div></section>
+ <section className="rounded-2xl bg-[#102b3b] p-7 text-white"><p className="font-mono text-xs uppercase tracking-[.15em] text-[#78e6ca]">A portfolio that grows with you</p><h2 className="mt-6 text-3xl font-semibold leading-tight tracking-tight">Good work deserves<br/>a great home.</h2><p className="mt-4 text-sm leading-7 text-[#b0bed0]">Add a case study, refine your introduction, or share a new milestone. Keep your portfolio as thoughtful as the systems you build.</p><Link href="/" target="_blank" rel="noopener noreferrer" className="mt-8 inline-flex items-center gap-2 rounded-xl bg-[#78e6ca] px-4 py-3 text-sm font-medium text-[#102036]">See your portfolio<ArrowRight size={16}/></Link></section></div></div>;
 }
