@@ -6,18 +6,8 @@ import { ArrowLeft, ArrowRight, Code2, Globe } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { TechBadge } from "@/components/ui/Badge";
 import { getAllProjects, getProjectBySlug, getProfile, getSiteSettings } from "@/lib/queries/portfolio";
-import { createStaticClient } from "@/lib/supabase/server";
 
-export async function generateStaticParams() {
-  // generateStaticParams runs at build time with no HTTP request, so it
-  // cannot use the cookie-based server client (getAllProjects() does,
-  // via createClient() -> cookies()). Query directly with the cookie-free
-  // static client instead — RLS still restricts this to published rows.
-  if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) return [];
-  const supabase = createStaticClient();
-  const { data: projects } = await supabase.from("projects").select("slug").eq("published", true);
-  return (projects ?? []).map((p) => ({ slug: p.slug }));
-}
+export const dynamic = "force-dynamic";
 
 export async function generateMetadata({
   params,
